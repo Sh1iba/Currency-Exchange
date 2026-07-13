@@ -15,6 +15,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.0.0")
+    implementation("org.xerial:sqlite-jdbc:3.53.2.0")
 }
 
 tasks.test {
