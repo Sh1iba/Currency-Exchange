@@ -1,4 +1,4 @@
-package io.github.sh1iba;
+package io.github.sh1iba.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,7 +19,7 @@ public class MyFirstServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/plain");
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println("I'm Batman");
+        resp.getWriter().println("I'm Batman $");
     }
 
 }

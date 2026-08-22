@@ -1,4 +1,4 @@
-package io.github.sh1iba;
+package io.github.sh1iba.utills;
 
 import java.io.IOException;
 import java.util.Properties;
