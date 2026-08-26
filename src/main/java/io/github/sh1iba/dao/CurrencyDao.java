@@ -12,9 +12,9 @@ import java.util.List;
 */
 public interface CurrencyDao {
 
-    Currency get(String code) throws SQLException;
-
     List<Currency> getAll() throws SQLException;
+
+    Currency get(String code) throws SQLException;
 
     Currency insert(Currency currency) throws SQLException;
 }
