@@ -8,12 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcRunner {
+public class Test {
 
-    private JdbcRunner() {
-    }
-
-    public static void connect() {
+    private static void connect() {
         try (var connection = DatabaseConnection.getConnection()) {
             System.out.println("Connection to database is successful");
         } catch (SQLException e) {
@@ -22,12 +19,21 @@ public class JdbcRunner {
     }
 
     public static void main(String[] args) {
+        getCurrencyByCode("USD");
+    }
+
+    private static void getAllCurrencies() {
         CurrencyDao currencyDao = new CurrencyDaoImpl();
         List<Currency> list = new ArrayList<>();
         list = currencyDao.getAll();
-        for(Currency c : list){
+        for (Currency c : list) {
             System.out.println(c);
         }
+    }
 
+    private static void getCurrencyByCode(String code) {
+        CurrencyDao currencyDao = new CurrencyDaoImpl();
+        Currency currency = currencyDao.get(code);
+        System.out.println(currency);
     }
 }

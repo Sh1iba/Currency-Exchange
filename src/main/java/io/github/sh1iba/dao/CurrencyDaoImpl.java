@@ -21,12 +21,12 @@ public class CurrencyDaoImpl implements CurrencyDao {
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 int id = resultSet.getInt("ID");
                 String code = resultSet.getString("Code");
                 String fullName = resultSet.getString("FullName");
                 String sign = resultSet.getString("Sign");
-                currencies.add(new Currency(id,code,fullName,sign));
+                currencies.add(new Currency(id, code, fullName, sign));
             }
 
         } catch (SQLException e) {
@@ -37,7 +37,27 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     @Override
     public Currency get(String code) {
-        return null;
+        Currency currency = null;
+        String query = "SELECT ID, Code, FullName, Sign FROM Currencies WHERE Code = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, code);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()){
+                    int id = resultSet.getInt("ID");
+                    String resCode = resultSet.getString("Code");
+                    String fullName = resultSet.getString("FullName");
+                    String sign = resultSet.getString("Sign");
+                    currency = new Currency(id, resCode, fullName, sign);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to get Currency by code", e);
+        }
+        return currency;
     }
 
     @Override
