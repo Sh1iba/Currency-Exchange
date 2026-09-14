@@ -1,0 +1,33 @@
+import io.github.sh1iba.dao.CurrencyDao;
+import io.github.sh1iba.dao.CurrencyDaoImpl;
+import io.github.sh1iba.exception.DatabaseException;
+import io.github.sh1iba.model.Currency;
+import io.github.sh1iba.utils.DatabaseConnection;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class JdbcRunner {
+
+    private JdbcRunner() {
+    }
+
+    public static void connect() {
+        try (var connection = DatabaseConnection.getConnection()) {
+            System.out.println("Connection to database is successful");
+        } catch (SQLException e) {
+            throw new DatabaseException("Database error occurred", e);
+        }
+    }
+
+    public static void main(String[] args) {
+        CurrencyDao currencyDao = new CurrencyDaoImpl();
+        List<Currency> list = new ArrayList<>();
+        list = currencyDao.getAll();
+        for(Currency c : list){
+            System.out.println(c);
+        }
+
+    }
+}

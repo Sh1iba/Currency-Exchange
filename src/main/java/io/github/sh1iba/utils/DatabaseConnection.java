@@ -6,12 +6,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public final class ConnectionManager {
+public final class DatabaseConnection {
     private static final String URL_KEY = "db.url";
 
-    private ConnectionManager() {}
+    private DatabaseConnection() {}
 
-    public static Connection open() {
+    public static Connection getConnection() {
         try {
             return DriverManager.getConnection(PropertiesUtil.get(URL_KEY));
         } catch (SQLException e) {

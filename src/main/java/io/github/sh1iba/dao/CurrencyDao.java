@@ -2,7 +2,6 @@ package io.github.sh1iba.dao;
 
 import io.github.sh1iba.model.Currency;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /* TODO
@@ -12,9 +11,9 @@ import java.util.List;
 */
 public interface CurrencyDao {
 
-    List<Currency> getAll() throws SQLException;
+    List<Currency> getAll();
 
-    Currency get(String code) throws SQLException;
+    Currency get(String code);
 
-    Currency insert(Currency currency) throws SQLException;
+    Currency insert(Currency currency);
 }

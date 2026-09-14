@@ -15,13 +15,14 @@ import java.util.List;
 
 public interface ExchangeRateDao {
 
-    List<ExchangeRate> getAll() throws SQLException;
+    List<ExchangeRate> getAll();
 
-    ExchangeRate get(String pairOfCurrencyCodes) throws SQLException;
+    ExchangeRate get(String pairOfCurrencyCodes);
 
-    ExchangeRate insert(ExchangeRate exchangeRate) throws SQLException;
+    ExchangeRate insert(ExchangeRate exchangeRate);
 
-    ExchangeRate update(ExchangeRate exchangeRate) throws SQLException;
+    ExchangeRate update(ExchangeRate exchangeRate);
+
 
 
 }
