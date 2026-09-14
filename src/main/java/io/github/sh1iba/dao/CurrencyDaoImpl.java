@@ -45,7 +45,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
             preparedStatement.setString(1, code);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()){
+                if (resultSet.next()) {
                     int id = resultSet.getInt("ID");
                     String resCode = resultSet.getString("Code");
                     String fullName = resultSet.getString("FullName");
@@ -62,6 +62,22 @@ public class CurrencyDaoImpl implements CurrencyDao {
 
     @Override
     public Currency insert(Currency currency) {
-        return null;
+        String query = "INSERT INTO Currencies (Code, FullName, Sign) VALUES (?, ?, ?)";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, currency.getCode());
+            preparedStatement.setString(2, currency.getFullName());
+            preparedStatement.setString(3, currency.getSign());
+            preparedStatement.executeUpdate();
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                currency.setId(generatedKeys.getInt(1));
+            }
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to add a new currency to the database", e);
+        }
+
+        return currency;
     }
 }

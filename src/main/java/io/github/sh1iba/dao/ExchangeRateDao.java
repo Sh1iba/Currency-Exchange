@@ -10,7 +10,6 @@ package io.github.sh1iba.dao;
 
 import io.github.sh1iba.model.ExchangeRate;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface ExchangeRateDao {
@@ -22,7 +21,6 @@ public interface ExchangeRateDao {
     ExchangeRate insert(ExchangeRate exchangeRate);
 
     ExchangeRate update(ExchangeRate exchangeRate);
-
 
 
 }

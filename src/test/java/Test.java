@@ -19,7 +19,8 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        getCurrencyByCode("USD");
+        //getCurrencyByCode("USD");
+        insertCurrency(new Currency("CZK", "Czech Koruna", "Kč"));
     }
 
     private static void getAllCurrencies() {
@@ -34,6 +35,12 @@ public class Test {
     private static void getCurrencyByCode(String code) {
         CurrencyDao currencyDao = new CurrencyDaoImpl();
         Currency currency = currencyDao.get(code);
+        System.out.println(currency);
+    }
+
+    private static void insertCurrency(Currency currency){
+        CurrencyDao currencyDao = new CurrencyDaoImpl();
+        currency = currencyDao.insert(currency);
         System.out.println(currency);
     }
 }
