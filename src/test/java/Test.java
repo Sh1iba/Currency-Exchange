@@ -1,7 +1,10 @@
 import io.github.sh1iba.dao.CurrencyDao;
 import io.github.sh1iba.dao.CurrencyDaoImpl;
+import io.github.sh1iba.dao.ExchangeRateDao;
+import io.github.sh1iba.dao.ExchangeRateDaoImpl;
 import io.github.sh1iba.exception.DatabaseException;
 import io.github.sh1iba.model.Currency;
+import io.github.sh1iba.model.ExchangeRate;
 import io.github.sh1iba.utils.DatabaseConnection;
 
 import java.sql.SQLException;
@@ -20,7 +23,9 @@ public class Test {
 
     public static void main(String[] args) {
         //getCurrencyByCode("USD");
-        insertCurrency(new Currency("CZK", "Czech Koruna", "Kč"));
+        //insertCurrency(new Currency("CZK", "Czech Koruna", "Kč"));
+        //getAllExchangeRate();
+        getExchangeRateByCodes("USD","EUR");
     }
 
     private static void getAllCurrencies() {
@@ -38,9 +43,26 @@ public class Test {
         System.out.println(currency);
     }
 
-    private static void insertCurrency(Currency currency){
+    private static void insertCurrency(Currency currency) {
         CurrencyDao currencyDao = new CurrencyDaoImpl();
         currency = currencyDao.insert(currency);
         System.out.println(currency);
     }
+
+    private static void getAllExchangeRate() {
+        ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
+        List<ExchangeRate> list = new ArrayList<>();
+        list = exchangeRateDao.getAll();
+        for (ExchangeRate e : list) {
+            System.out.println(e);
+        }
+    }
+
+    private static void getExchangeRateByCodes(String baseCurrencyCode, String targetCurrencyCode) {
+        ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
+        ExchangeRate exchangeRate = exchangeRateDao.get(baseCurrencyCode,targetCurrencyCode);
+        System.out.println(exchangeRate);
+    }
+
+
 }

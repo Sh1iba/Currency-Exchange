@@ -16,7 +16,7 @@ public interface ExchangeRateDao {
 
     List<ExchangeRate> getAll();
 
-    ExchangeRate get(String pairOfCurrencyCodes);
+    ExchangeRate get(String baseCurrencyCode, String targetCurrencyCode);
 
     ExchangeRate insert(ExchangeRate exchangeRate);
 

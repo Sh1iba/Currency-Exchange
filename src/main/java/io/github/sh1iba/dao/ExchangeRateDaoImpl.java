@@ -37,8 +37,30 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
     }
 
     @Override
-    public ExchangeRate get(String pairOfCurrencyCodes) {
-        return null;
+    public ExchangeRate get(String baseCurrencyCode, String targetCurrencyCode) {
+        ExchangeRate exchangeRate = null;
+        String query = """ 
+                SELECT er.ID, er.BaseCurrencyId, er.TargetCurrencyId, er.Rate FROM ExchangeRates er 
+                JOIN Currencies a ON er.BaseCurrencyId = a.ID AND a.Code = ? 
+                JOIN Currencies b ON er.TargetCurrencyId = b.ID AND b.Code = ?
+                """;
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, baseCurrencyCode);
+            preparedStatement.setString(2, targetCurrencyCode);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int id = resultSet.getInt("ID");
+                    int baseCurrencyId = resultSet.getInt("BaseCurrencyId");
+                    int targetCurrencyId = resultSet.getInt("TargetCurrencyId");
+                    BigDecimal rate = resultSet.getBigDecimal("Rate");
+                    exchangeRate = new ExchangeRate(id, baseCurrencyId, targetCurrencyId, rate);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to get Exchange rate by codes", e);
+        }
+        return exchangeRate;
     }
 
     @Override
