@@ -34,6 +34,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
             throw new DatabaseException("Failed to get all Exchange rate", e);
         }
         return exchangeRateList;
+
     }
 
     @Override
@@ -65,7 +66,20 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
     @Override
     public ExchangeRate insert(ExchangeRate exchangeRate) {
-        return null;
+        String query = "INSERT INTO ExchangeRates (BaseCurrencyId, TargetCurrencyId, Rate) VALUES (?, ?, ?)";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, exchangeRate.getBaseCurrencyId());
+            preparedStatement.setInt(2, exchangeRate.getTargetCurrencyId());
+            preparedStatement.setBigDecimal(3, exchangeRate.getRate());
+            preparedStatement.executeUpdate();
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                exchangeRate.setId(generatedKeys.getInt(1));
+            }
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to add new exchange rate to the database", e);
+        }
+        return exchangeRate;
     }
 
     @Override

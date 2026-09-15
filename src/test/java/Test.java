@@ -7,6 +7,7 @@ import io.github.sh1iba.model.Currency;
 import io.github.sh1iba.model.ExchangeRate;
 import io.github.sh1iba.utils.DatabaseConnection;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,8 @@ public class Test {
         //getCurrencyByCode("USD");
         //insertCurrency(new Currency("CZK", "Czech Koruna", "Kč"));
         //getAllExchangeRate();
-        getExchangeRateByCodes("USD","EUR");
+        //getExchangeRateByCodes("USD","EUR");
+        addExchangeRate(new ExchangeRate(25, 22, new BigDecimal("48.65")));
     }
 
     private static void getAllCurrencies() {
@@ -60,7 +62,13 @@ public class Test {
 
     private static void getExchangeRateByCodes(String baseCurrencyCode, String targetCurrencyCode) {
         ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
-        ExchangeRate exchangeRate = exchangeRateDao.get(baseCurrencyCode,targetCurrencyCode);
+        ExchangeRate exchangeRate = exchangeRateDao.get(baseCurrencyCode, targetCurrencyCode);
+        System.out.println(exchangeRate);
+    }
+
+    private static void addExchangeRate(ExchangeRate exchangeRate) {
+        ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
+        exchangeRate = exchangeRateDao.insert(exchangeRate);
         System.out.println(exchangeRate);
     }
 
