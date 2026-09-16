@@ -10,6 +10,7 @@ package io.github.sh1iba.dao;
 
 import io.github.sh1iba.model.ExchangeRate;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ExchangeRateDao {
@@ -20,7 +21,5 @@ public interface ExchangeRateDao {
 
     ExchangeRate insert(ExchangeRate exchangeRate);
 
-    ExchangeRate update(ExchangeRate exchangeRate);
-
-
+    ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate);
 }

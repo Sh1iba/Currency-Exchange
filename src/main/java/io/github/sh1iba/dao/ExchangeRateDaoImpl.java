@@ -74,7 +74,9 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
             preparedStatement.setBigDecimal(3, exchangeRate.getRate());
             preparedStatement.executeUpdate();
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                exchangeRate.setId(generatedKeys.getInt(1));
+                if (generatedKeys.next()) {
+                    exchangeRate.setId(generatedKeys.getInt(1));
+                }
             }
         } catch (SQLException e) {
             throw new DatabaseException("Failed to add new exchange rate to the database", e);
@@ -83,7 +85,20 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
     }
 
     @Override
-    public ExchangeRate update(ExchangeRate exchangeRate) {
-        return null;
+    public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
+        ExchangeRate exchangeRate = get(baseCurrencyCode, targetCurrencyCode);
+        String query = "UPDATE ExchangeRates SET Rate = ? WHERE ID = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ) {
+            preparedStatement.setBigDecimal(1, rate);
+            preparedStatement.setInt(2, exchangeRate.getId());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Failed to update exchange rate", e);
+        }
+        exchangeRate.setRate(rate);
+        return exchangeRate;
     }
 }
