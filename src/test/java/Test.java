@@ -28,7 +28,7 @@ public class Test {
         //getAllExchangeRate();
         //getExchangeRateByCodes("USD","EUR");
         //addExchangeRate(new ExchangeRate(25, 22, new BigDecimal("48.65")));
-        updateExchangeRate("USD","TRY", new BigDecimal("48.66"));
+        updateExchangeRate("USD", "TRY", new BigDecimal("48.66"));
     }
 
     private static void getAllCurrencies() {
@@ -76,7 +76,7 @@ public class Test {
     private static void updateExchangeRate(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         ExchangeRate exchangeRate = null;
         ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
-        exchangeRate = exchangeRateDao.update(baseCurrencyCode,targetCurrencyCode,rate);
+        exchangeRate = exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, rate);
         System.out.println(exchangeRate);
     }
 
