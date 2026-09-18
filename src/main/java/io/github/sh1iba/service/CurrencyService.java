@@ -3,7 +3,7 @@ package io.github.sh1iba.service;
 import io.github.sh1iba.dao.CurrencyDao;
 import io.github.sh1iba.dao.CurrencyDaoImpl;
 import io.github.sh1iba.dto.CurrencyDto;
-import io.github.sh1iba.dto.CurrencyMapper;
+import io.github.sh1iba.dto.mapper.CurrencyMapper;
 import io.github.sh1iba.model.Currency;
 
 import java.util.List;

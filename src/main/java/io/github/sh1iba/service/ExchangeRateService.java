@@ -3,7 +3,7 @@ package io.github.sh1iba.service;
 import io.github.sh1iba.dao.ExchangeRateDao;
 import io.github.sh1iba.dao.ExchangeRateDaoImpl;
 import io.github.sh1iba.dto.ExchangeRateDto;
-import io.github.sh1iba.dto.ExchangeRateMapper;
+import io.github.sh1iba.dto.mapper.ExchangeRateMapper;
 import io.github.sh1iba.model.ExchangeRate;
 
 import java.math.BigDecimal;

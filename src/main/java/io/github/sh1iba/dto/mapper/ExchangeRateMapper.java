@@ -1,5 +1,6 @@
-package io.github.sh1iba.dto;
+package io.github.sh1iba.dto.mapper;
 
+import io.github.sh1iba.dto.ExchangeRateDto;
 import io.github.sh1iba.model.ExchangeRate;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class ExchangeRateMapper {
         return exchangeRateDtoList;
     }
 
-    public static ExchangeRate toEntity(ExchangeRateDto exchangeRateDto){
+    public static ExchangeRate toEntity(ExchangeRateDto exchangeRateDto) {
         return new ExchangeRate(exchangeRateDto.getBaseCurrencyId(), exchangeRateDto.getTargetCurrencyId(), exchangeRateDto.getRate());
     }
 }

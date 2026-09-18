@@ -1,5 +1,6 @@
-package io.github.sh1iba.dto;
+package io.github.sh1iba.dto.mapper;
 
+import io.github.sh1iba.dto.CurrencyDto;
 import io.github.sh1iba.model.Currency;
 
 import java.util.ArrayList;
