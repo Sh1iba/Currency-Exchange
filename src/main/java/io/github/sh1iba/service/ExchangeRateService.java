@@ -14,22 +14,22 @@ public class ExchangeRateService {
     private final ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
 
     public List<ExchangeRateDto> getAll() {
-        return ExchangeRateMapper.listToDto(exchangeRateDao.getAll());
+        return ExchangeRateMapper.INSTANCE.listToDto(exchangeRateDao.getAll());
     }
 
     public ExchangeRateDto getExchangeRateByCodes(String baseCurrencyCode, String targetCurrencyCode) {
-        return ExchangeRateMapper.toDto(exchangeRateDao.get(baseCurrencyCode, targetCurrencyCode));
+        return ExchangeRateMapper.INSTANCE.toDto(exchangeRateDao.get(baseCurrencyCode, targetCurrencyCode));
     }
 
     public ExchangeRateDto addExchangeRate(ExchangeRateDto exchangeRateDto) {
-        ExchangeRate exchangeRate = ExchangeRateMapper.toEntity(exchangeRateDto);
+        ExchangeRate exchangeRate = ExchangeRateMapper.INSTANCE.toEntity(exchangeRateDto);
         exchangeRate = exchangeRateDao.insert(exchangeRate);
-        return ExchangeRateMapper.toDto(exchangeRate);
+        return ExchangeRateMapper.INSTANCE.toDto(exchangeRate);
     }
 
     public ExchangeRateDto updateExchangeRate(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         ExchangeRate exchangeRate = exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, rate);
-        return ExchangeRateMapper.toDto(exchangeRate);
+        return ExchangeRateMapper.INSTANCE.toDto(exchangeRate);
     }
 
 }

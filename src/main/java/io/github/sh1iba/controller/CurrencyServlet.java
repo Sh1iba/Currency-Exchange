@@ -12,8 +12,8 @@ import java.io.IOException;
 //text/plain
 //application/xml
 
-@WebServlet("/hello")
-public class MyFirstServlet extends HttpServlet {
+@WebServlet("/currency/*")
+public class CurrencyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

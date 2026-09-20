@@ -8,6 +8,8 @@ public class ExchangeRate {
     private int targetCurrencyId;
     private BigDecimal rate;
 
+    public ExchangeRate() {}
+
     public ExchangeRate(int id, int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
         this.id = id;
         this.baseCurrencyId = baseCurrencyId;

@@ -3,19 +3,21 @@ package io.github.sh1iba.dto;
 public class CurrencyDto {
     private int id;
     private String code;
-    private String fullName;
+    private String name;
     private String sign;
 
-    public CurrencyDto(int id, String code, String fullName, String sign) {
+    public CurrencyDto(){}
+
+    public CurrencyDto(int id, String code, String name, String sign) {
         this.id = id;
         this.code = code;
-        this.fullName = fullName;
+        this.name = name;
         this.sign = sign;
     }
 
-    public CurrencyDto(String code, String fullName, String sign) {
+    public CurrencyDto(String code, String name, String sign) {
         this.code = code;
-        this.fullName = fullName;
+        this.name = name;
         this.sign = sign;
     }
 
@@ -35,12 +37,12 @@ public class CurrencyDto {
         this.code = code;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSign() {
@@ -56,7 +58,7 @@ public class CurrencyDto {
         return "CurrencyDto{" +
                 "id=" + id +
                 ", code='" + code + '\'' +
-                ", fullName='" + fullName + '\'' +
+                ", name='" + name + '\'' +
                 ", sign='" + sign + '\'' +
                 '}';
     }

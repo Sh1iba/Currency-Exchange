@@ -2,29 +2,25 @@ package io.github.sh1iba.dto.mapper;
 
 import io.github.sh1iba.dto.CurrencyDto;
 import io.github.sh1iba.model.Currency;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class CurrencyMapper {
+@Mapper(unmappedTargetPolicy = ReportingPolicy.ERROR)
+public interface CurrencyMapper {
 
-    private CurrencyMapper() {
-    }
+    CurrencyMapper INSTANCE = Mappers.getMapper(CurrencyMapper.class);
 
-    public static CurrencyDto toDto(Currency currency) {
-        return new CurrencyDto(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
-    }
+    @Mapping(source = "fullName", target = "name")
+    CurrencyDto toDto(Currency currency);
 
-    public static List<CurrencyDto> listToDto(List<Currency> currencies) {
-        List<CurrencyDto> currencyDtoList = new ArrayList<>();
-        for(Currency currency : currencies){
-            currencyDtoList.add(toDto(currency));
-        }
-        return currencyDtoList;
-    }
+    @Mapping(source = "fullName", target = "name")
+    List<CurrencyDto> listToDto(List<Currency> currencies);
 
-    public static Currency toEntity(CurrencyDto currencyDto) {
-        return new Currency(currencyDto.getCode(), currencyDto.getFullName(), currencyDto.getSign());
-    }
+    @Mapping(source = "name", target = "fullName")
+    Currency toEntity(CurrencyDto currencyDto);
 
 }

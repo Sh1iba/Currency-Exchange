@@ -4,20 +4,22 @@ import java.math.BigDecimal;
 
 public class ExchangeRateDto {
     private int id;
-    private int baseCurrencyId;
-    private int targetCurrencyId;
+    private int baseCurrency;
+    private int targetCurrency;
     private BigDecimal rate;
 
-    public ExchangeRateDto(int id, int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
+    public ExchangeRateDto(){}
+
+    public ExchangeRateDto(int id, int baseCurrency, int targetCurrency, BigDecimal rate) {
         this.id = id;
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
-    public ExchangeRateDto(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+    public ExchangeRateDto(int baseCurrency, int targetCurrency, BigDecimal rate) {
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
@@ -29,20 +31,20 @@ public class ExchangeRateDto {
         this.id = id;
     }
 
-    public int getBaseCurrencyId() {
-        return baseCurrencyId;
+    public int getBaseCurrency() {
+        return baseCurrency;
     }
 
-    public void setBaseCurrencyId(int baseCurrencyId) {
-        this.baseCurrencyId = baseCurrencyId;
+    public void setBaseCurrency(int baseCurrency) {
+        this.baseCurrency = baseCurrency;
     }
 
-    public int getTargetCurrencyId() {
-        return targetCurrencyId;
+    public int getTargetCurrency() {
+        return targetCurrency;
     }
 
-    public void setTargetCurrencyId(int targetCurrencyId) {
-        this.targetCurrencyId = targetCurrencyId;
+    public void setTargetCurrency(int targetCurrency) {
+        this.targetCurrency = targetCurrency;
     }
 
     public BigDecimal getRate() {
@@ -57,8 +59,8 @@ public class ExchangeRateDto {
     public String toString() {
         return "ExchangeRateDto{" +
                 "id=" + id +
-                ", baseCurrencyId=" + baseCurrencyId +
-                ", targetCurrencyId=" + targetCurrencyId +
+                ", baseCurrency=" + baseCurrency +
+                ", targetCurrency=" + targetCurrency +
                 ", rate=" + rate +
                 '}';
     }

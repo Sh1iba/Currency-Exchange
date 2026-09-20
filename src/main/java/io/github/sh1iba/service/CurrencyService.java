@@ -13,16 +13,16 @@ public class CurrencyService {
     private final CurrencyDao currencyDao = new CurrencyDaoImpl();
 
     public List<CurrencyDto> getAll() {
-        return CurrencyMapper.listToDto(currencyDao.getAll());
+        return CurrencyMapper.INSTANCE.listToDto(currencyDao.getAll());
     }
 
     public CurrencyDto getCurrencyByCode(String code) {
-        return CurrencyMapper.toDto(currencyDao.get(code));
+        return CurrencyMapper.INSTANCE.toDto(currencyDao.get(code));
     }
 
     public CurrencyDto addCurrency(CurrencyDto currencyDto) {
-        Currency currency = CurrencyMapper.toEntity(currencyDto);
-        return CurrencyMapper.toDto(currencyDao.insert(currency));
+        Currency currency = CurrencyMapper.INSTANCE.toEntity(currencyDto);
+        return CurrencyMapper.INSTANCE.toDto(currency);
     }
 
 }

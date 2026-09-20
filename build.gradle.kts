@@ -16,6 +16,9 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.0.0")
     implementation("org.xerial:sqlite-jdbc:3.53.2.0")
+    implementation("com.google.code.gson:gson:2.14.0")
+    implementation("org.mapstruct:mapstruct:1.6.3")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 }
 
 tasks.test {
