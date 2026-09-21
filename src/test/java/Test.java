@@ -24,11 +24,11 @@ public class Test {
 
     public static void main(String[] args) {
         //getCurrencyByCode("USD");
-        //insertCurrency(new Currency("CZK", "Czech Koruna", "Kč"));
+        insertCurrency(new Currency("CZK", "Czech Koruna", "Kč"));
         //getAllExchangeRate();
         //getExchangeRateByCodes("USD","EUR");
         //addExchangeRate(new ExchangeRate(25, 22, new BigDecimal("48.65")));
-        updateExchangeRate("USD", "TRY", new BigDecimal("48.66"));
+        //updateExchangeRate("USD", "TRY", new BigDecimal("48.66"));
     }
 
     private static void getAllCurrencies() {

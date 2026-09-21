@@ -1,8 +1,11 @@
 package io.github.sh1iba.dao;
 
+import io.github.sh1iba.exception.CurrencyCodeExistsException;
 import io.github.sh1iba.exception.DatabaseException;
 import io.github.sh1iba.model.Currency;
 import io.github.sh1iba.utils.DatabaseConnection;
+import org.sqlite.SQLiteErrorCode;
+import org.sqlite.SQLiteException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -73,8 +76,12 @@ public class CurrencyDaoImpl implements CurrencyDao {
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                 currency.setId(generatedKeys.getInt(1));
             }
-
         } catch (SQLException e) {
+            if (e instanceof SQLiteException sqLiteException) {
+                if (sqLiteException.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+                    throw new CurrencyCodeExistsException("A currency with this code already exists", e);
+                }
+            }
             throw new DatabaseException("Failed to add a new currency to the database", e);
         }
 

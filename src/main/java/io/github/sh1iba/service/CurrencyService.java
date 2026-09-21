@@ -22,7 +22,7 @@ public class CurrencyService {
 
     public CurrencyDto addCurrency(CurrencyDto currencyDto) {
         Currency currency = CurrencyMapper.INSTANCE.toEntity(currencyDto);
-        return CurrencyMapper.INSTANCE.toDto(currency);
+        return CurrencyMapper.INSTANCE.toDto(currencyDao.insert(currency));
     }
 
 }
