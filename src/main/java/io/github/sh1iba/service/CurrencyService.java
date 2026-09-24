@@ -4,6 +4,7 @@ import io.github.sh1iba.dao.CurrencyDao;
 import io.github.sh1iba.dao.CurrencyDaoImpl;
 import io.github.sh1iba.dto.CurrencyDto;
 import io.github.sh1iba.dto.mapper.CurrencyMapper;
+import io.github.sh1iba.exception.ObjectNotFoundException;
 import io.github.sh1iba.model.Currency;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class CurrencyService {
     }
 
     public CurrencyDto getCurrencyByCode(String code) {
-        return CurrencyMapper.INSTANCE.toDto(currencyDao.get(code));
+        Currency currency = currencyDao.get(code).orElseThrow(() -> new ObjectNotFoundException("The currency was not found"));
+        return CurrencyMapper.INSTANCE.toDto(currency);
     }
 
     public CurrencyDto addCurrency(CurrencyDto currencyDto) {

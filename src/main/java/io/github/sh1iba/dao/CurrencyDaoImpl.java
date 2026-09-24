@@ -1,6 +1,6 @@
 package io.github.sh1iba.dao;
 
-import io.github.sh1iba.exception.CurrencyCodeExistsException;
+import io.github.sh1iba.exception.ObjectExistsException;
 import io.github.sh1iba.exception.DatabaseException;
 import io.github.sh1iba.model.Currency;
 import io.github.sh1iba.utils.DatabaseConnection;
@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class CurrencyDaoImpl implements CurrencyDao {
 
@@ -39,7 +40,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
     }
 
     @Override
-    public Currency get(String code) {
+    public Optional<Currency> get(String code) {
         Currency currency = null;
         String query = "SELECT ID, Code, FullName, Sign FROM Currencies WHERE Code = ?";
 
@@ -60,7 +61,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
         } catch (SQLException e) {
             throw new DatabaseException("Failed to get Currency by code", e);
         }
-        return currency;
+        return Optional.ofNullable(currency);
     }
 
     @Override
@@ -79,7 +80,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
         } catch (SQLException e) {
             if (e instanceof SQLiteException sqLiteException) {
                 if (sqLiteException.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
-                    throw new CurrencyCodeExistsException("A currency with this code already exists", e);
+                    throw new ObjectExistsException("A currency with this code already exists", e);
                 }
             }
             throw new DatabaseException("Failed to add a new currency to the database", e);
