@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Test {
 
@@ -27,7 +28,7 @@ public class Test {
         insertCurrency(new Currency("CZK", "Czech Koruna", "Kč"));
         //getAllExchangeRate();
         //getExchangeRateByCodes("USD","EUR");
-        //addExchangeRate(new ExchangeRate(25, 22, new BigDecimal("48.65")));
+        //addExchangeRate(new ExchangeRateDto(25, 22, new BigDecimal("48.65")));
         //updateExchangeRate("USD", "TRY", new BigDecimal("48.66"));
     }
 
@@ -42,7 +43,7 @@ public class Test {
 
     private static void getCurrencyByCode(String code) {
         CurrencyDao currencyDao = new CurrencyDaoImpl();
-        Currency currency = currencyDao.get(code);
+        Optional<Currency> currency = currencyDao.get(code);
         System.out.println(currency);
     }
 

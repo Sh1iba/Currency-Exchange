@@ -71,7 +71,7 @@ public class CurrencyDaoImpl implements CurrencyDao {
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, currency.getCode());
-            preparedStatement.setString(2, currency.getFullName());
+            preparedStatement.setString(2, currency.getName());
             preparedStatement.setString(3, currency.getSign());
             preparedStatement.executeUpdate();
             try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {

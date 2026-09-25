@@ -4,22 +4,22 @@ import java.math.BigDecimal;
 
 public class ExchangeRate {
     private int id;
-    private int baseCurrencyId;
-    private int targetCurrencyId;
+    private Currency baseCurrency;
+    private Currency targetCurrency;
     private BigDecimal rate;
 
     public ExchangeRate() {}
 
-    public ExchangeRate(int id, int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
+    public ExchangeRate(int id, Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
         this.id = id;
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
-    public ExchangeRate(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+    public ExchangeRate(Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
@@ -31,20 +31,20 @@ public class ExchangeRate {
         this.id = id;
     }
 
-    public int getBaseCurrencyId() {
-        return baseCurrencyId;
+    public Currency getBaseCurrency() {
+        return baseCurrency;
     }
 
-    public void setBaseCurrencyId(int baseCurrencyId) {
-        this.baseCurrencyId = baseCurrencyId;
+    public void setBaseCurrency(Currency baseCurrency) {
+        this.baseCurrency = baseCurrency;
     }
 
-    public int getTargetCurrencyId() {
-        return targetCurrencyId;
+    public Currency getTargetCurrency() {
+        return targetCurrency;
     }
 
-    public void setTargetCurrencyId(int targetCurrencyId) {
-        this.targetCurrencyId = targetCurrencyId;
+    public void setTargetCurrency(Currency targetCurrency) {
+        this.targetCurrency = targetCurrency;
     }
 
     public BigDecimal getRate() {
@@ -53,15 +53,5 @@ public class ExchangeRate {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
-    }
-
-    @Override
-    public String toString() {
-        return "ExchangeRate{" +
-                "id=" + id +
-                ", baseCurrencyId=" + baseCurrencyId +
-                ", targetCurrencyId=" + targetCurrencyId +
-                ", rate=" + rate +
-                '}';
     }
 }

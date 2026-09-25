@@ -4,20 +4,20 @@ import java.math.BigDecimal;
 
 public class ExchangeRateDto {
     private int id;
-    private int baseCurrency;
-    private int targetCurrency;
+    private CurrencyDto baseCurrency;
+    private CurrencyDto targetCurrency;
     private BigDecimal rate;
 
-    public ExchangeRateDto(){}
+    public ExchangeRateDto() {}
 
-    public ExchangeRateDto(int id, int baseCurrency, int targetCurrency, BigDecimal rate) {
+    public ExchangeRateDto(int id, CurrencyDto baseCurrency, CurrencyDto targetCurrency, BigDecimal rate) {
         this.id = id;
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
-    public ExchangeRateDto(int baseCurrency, int targetCurrency, BigDecimal rate) {
+    public ExchangeRateDto(CurrencyDto baseCurrency, CurrencyDto targetCurrency, BigDecimal rate) {
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;
@@ -31,19 +31,19 @@ public class ExchangeRateDto {
         this.id = id;
     }
 
-    public int getBaseCurrency() {
+    public CurrencyDto getBaseCurrency() {
         return baseCurrency;
     }
 
-    public void setBaseCurrency(int baseCurrency) {
+    public void setBaseCurrency(CurrencyDto baseCurrency) {
         this.baseCurrency = baseCurrency;
     }
 
-    public int getTargetCurrency() {
+    public CurrencyDto getTargetCurrency() {
         return targetCurrency;
     }
 
-    public void setTargetCurrency(int targetCurrency) {
+    public void setTargetCurrency(CurrencyDto targetCurrency) {
         this.targetCurrency = targetCurrency;
     }
 
@@ -53,15 +53,5 @@ public class ExchangeRateDto {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
-    }
-
-    @Override
-    public String toString() {
-        return "ExchangeRateDto{" +
-                "id=" + id +
-                ", baseCurrency=" + baseCurrency +
-                ", targetCurrency=" + targetCurrency +
-                ", rate=" + rate +
-                '}';
     }
 }
