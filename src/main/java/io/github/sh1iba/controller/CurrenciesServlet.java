@@ -5,6 +5,7 @@ import io.github.sh1iba.exception.ObjectExistsException;
 import io.github.sh1iba.exception.DatabaseException;
 import io.github.sh1iba.exception.IncorrectRequestException;
 import io.github.sh1iba.service.CurrencyService;
+import io.github.sh1iba.validation.CurrencyValidation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,18 +49,12 @@ public class CurrenciesServlet extends BaseServlet {
     }
 
     private CurrencyDto getDataFromForm(HttpServletRequest req) throws IncorrectRequestException {
+        CurrencyValidation.formValidation(req,"name");
+        CurrencyValidation.formValidation(req,"code");
+        CurrencyValidation.formValidation(req,"sign");
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sign = req.getParameter("sign");
-        if (name == null || name.isBlank()) {
-            throw new IncorrectRequestException("The required 'name' form field is missing");
-        }
-        if (code == null || code.isBlank()) {
-            throw new IncorrectRequestException("The required 'code' form field is missing");
-        }
-        if (sign == null || sign.isBlank()) {
-            throw new IncorrectRequestException("The required 'sign' form field is missing");
-        }
         return new CurrencyDto(code, name, sign);
     }
 }

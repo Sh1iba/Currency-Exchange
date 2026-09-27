@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
@@ -19,7 +20,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
     public List<ExchangeRate> getAll() {
         List<ExchangeRate> exchangeRateList = new ArrayList<>();
         String query = """
-                SELECT er.ID, a.ID AS BaseID,  a.Code AS BaseCode, a.FullName AS BaseFullName, a.Sign AS BaseSign, 
+                SELECT er.ID, a.ID AS BaseID, a.Code AS BaseCode, a.FullName AS BaseFullName, a.Sign AS BaseSign, 
                        b.ID AS TargetID, b.Code AS TargetCode, b.FullName AS TargetFullName, b.Sign AS TargetSign, 
                        er.Rate FROM ExchangeRates er JOIN Currencies a ON er.BaseCurrencyId = a.ID JOIN Currencies b 
                        ON er.TargetCurrencyId = b.ID
@@ -40,7 +41,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
     }
 
     @Override
-    public ExchangeRate get(String baseCurrencyCode, String targetCurrencyCode) {
+    public Optional<ExchangeRate> get(String baseCurrencyCode, String targetCurrencyCode) {
         ExchangeRate exchangeRate = null;
         String query = """ 
                 SELECT er.ID, a.ID AS BaseID,  a.Code AS BaseCode, a.FullName AS BaseFullName, a.Sign AS BaseSign, 
@@ -60,7 +61,7 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
         } catch (SQLException e) {
             throw new DatabaseException("Failed to get Exchange rate by codes", e);
         }
-        return exchangeRate;
+        return Optional.ofNullable(exchangeRate);
     }
 
     @Override
@@ -85,7 +86,8 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
 
     @Override
     public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
-        ExchangeRate exchangeRate = get(baseCurrencyCode, targetCurrencyCode);
+        //ExchangeRate exchangeRate = get(baseCurrencyCode, targetCurrencyCode);
+        ExchangeRate exchangeRate = null; // vremenno
         String query = "UPDATE ExchangeRates SET Rate = ? WHERE ID = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);

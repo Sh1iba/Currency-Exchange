@@ -64,8 +64,8 @@ public class Test {
 
     private static void getExchangeRateByCodes(String baseCurrencyCode, String targetCurrencyCode) {
         ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
-        ExchangeRate exchangeRate = exchangeRateDao.get(baseCurrencyCode, targetCurrencyCode);
-        System.out.println(exchangeRate);
+        //ExchangeRate exchangeRate = exchangeRateDao.get(baseCurrencyCode, targetCurrencyCode);
+       // System.out.println(exchangeRate);
     }
 
     private static void addExchangeRate(ExchangeRate exchangeRate) {

@@ -4,6 +4,7 @@ import io.github.sh1iba.dao.ExchangeRateDao;
 import io.github.sh1iba.dao.ExchangeRateDaoImpl;
 import io.github.sh1iba.dto.ExchangeRateDto;
 import io.github.sh1iba.dto.mapper.ExchangeRateMapper;
+import io.github.sh1iba.exception.ObjectNotFoundException;
 import io.github.sh1iba.model.ExchangeRate;
 
 import java.math.BigDecimal;
@@ -18,7 +19,9 @@ public class ExchangeRateService {
     }
 
     public ExchangeRateDto getExchangeRateByCodes(String baseCurrencyCode, String targetCurrencyCode) {
-        return ExchangeRateMapper.INSTANCE.toDto(exchangeRateDao.get(baseCurrencyCode, targetCurrencyCode));
+        ExchangeRate exchangeRate = exchangeRateDao.get(baseCurrencyCode,targetCurrencyCode)
+                .orElseThrow(()-> new ObjectNotFoundException("The exchange rate for the pair has not been found"));
+        return ExchangeRateMapper.INSTANCE.toDto(exchangeRate);
     }
 
     public ExchangeRateDto addExchangeRate(ExchangeRateDto exchangeRateDto) {
