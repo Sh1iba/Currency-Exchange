@@ -12,11 +12,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Map;
 
 @WebServlet("/exchangeRate/*")
 public class ExchangeRateServlet extends BaseServlet {
 
     private final ExchangeRateService exchangeRateService = new ExchangeRateService();
+    private static final int CURRENCY_CODE_LENGTH = 3;
+    private static final int CURRENCY_PAIR_CODES_LENGTH = 6;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -25,9 +29,9 @@ public class ExchangeRateServlet extends BaseServlet {
             String path = req.getPathInfo();
             ExchangeRateValidation.pathValidation(path);
             String pairOfCodes = path.substring(1);
-            ExchangeRateValidation.pairOfCodesValidation(pairOfCodes);
-            String baseCode = pairOfCodes.substring(0, 3);
-            String targetCode = pairOfCodes.substring(3, 6);
+            ExchangeRateValidation.pairOfCodesValidation(pairOfCodes, CURRENCY_PAIR_CODES_LENGTH);
+            String baseCode = pairOfCodes.substring(0, CURRENCY_CODE_LENGTH);
+            String targetCode = pairOfCodes.substring(CURRENCY_CODE_LENGTH, CURRENCY_PAIR_CODES_LENGTH);
             ExchangeRateDto exchangeRateDto = exchangeRateService.getExchangeRateByCodes(baseCode, targetCode);
             resp.setStatus(HttpServletResponse.SC_OK);
             gson.toJson(exchangeRateDto, resp.getWriter());
@@ -39,5 +43,38 @@ public class ExchangeRateServlet extends BaseServlet {
         } catch (ObjectNotFoundException e) {
             writeErrorMessage(resp, e.getMessage(), HttpServletResponse.SC_NOT_FOUND);
         }
+    }
+
+    @Override
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            resp.setContentType("application/json");
+            String path = req.getPathInfo();
+            ExchangeRateValidation.pathValidation(path);
+            String pairOfCodes = path.substring(1);
+            ExchangeRateValidation.pairOfCodesValidation(pairOfCodes, CURRENCY_PAIR_CODES_LENGTH);
+            String baseCode = pairOfCodes.substring(0, CURRENCY_CODE_LENGTH);
+            String targetCode = pairOfCodes.substring(CURRENCY_CODE_LENGTH, CURRENCY_PAIR_CODES_LENGTH);
+
+            Map<String, String> reqBody = parseFromForm(req);
+            ExchangeRateValidation.formValidation(reqBody, "rate");
+            String strRate = reqBody.get("rate");
+            BigDecimal rate;
+            try {
+                rate = new BigDecimal(strRate);
+            } catch (NumberFormatException e) {
+                throw new IncorrectRequestException("Rate must be a valid number");
+            }
+            ExchangeRateDto exchangeRateDto = exchangeRateService.updateExchangeRate(baseCode, targetCode, rate);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            gson.toJson(exchangeRateDto, resp.getWriter());
+        } catch (DatabaseException e) {
+            writeErrorMessage(resp, e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (IncorrectRequestException e) {
+            writeErrorMessage(resp, e.getMessage(), HttpServletResponse.SC_BAD_REQUEST);
+        } catch (ObjectNotFoundException e) {
+            writeErrorMessage(resp, e.getMessage(), HttpServletResponse.SC_NOT_FOUND);
+        }
+
     }
 }

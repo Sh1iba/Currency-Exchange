@@ -30,7 +30,6 @@ public class CurrencyServlet extends BaseServlet {
             CurrencyDto currencyDto = currencyService.getCurrencyByCode(code);
             resp.setStatus(HttpServletResponse.SC_OK);
             gson.toJson(currencyDto, resp.getWriter());
-
         } catch (DatabaseException e) {
             writeErrorMessage(resp, e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (IncorrectRequestException e) {

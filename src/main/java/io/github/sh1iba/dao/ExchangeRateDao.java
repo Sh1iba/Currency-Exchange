@@ -22,5 +22,5 @@ public interface ExchangeRateDao {
 
     ExchangeRate insert(ExchangeRate exchangeRate);
 
-    ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate);
+    ExchangeRate update(ExchangeRate exchangeRate, BigDecimal rate);
 }

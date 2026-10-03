@@ -1,9 +1,12 @@
 package io.github.sh1iba.dao;
 
 import io.github.sh1iba.exception.DatabaseException;
+import io.github.sh1iba.exception.ObjectExistsException;
 import io.github.sh1iba.model.Currency;
 import io.github.sh1iba.model.ExchangeRate;
 import io.github.sh1iba.utils.DatabaseConnection;
+import org.sqlite.SQLiteErrorCode;
+import org.sqlite.SQLiteException;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
@@ -79,15 +82,18 @@ public class ExchangeRateDaoImpl implements ExchangeRateDao {
                 }
             }
         } catch (SQLException e) {
+            if (e instanceof SQLiteException sqLiteException) {
+                if (sqLiteException.getResultCode() == SQLiteErrorCode.SQLITE_CONSTRAINT_UNIQUE) {
+                    throw new ObjectExistsException("A currency pair with this code already exists");
+                }
+            }
             throw new DatabaseException("Failed to add new exchange rate to the database", e);
         }
         return exchangeRate;
     }
 
     @Override
-    public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
-        //ExchangeRate exchangeRate = get(baseCurrencyCode, targetCurrencyCode);
-        ExchangeRate exchangeRate = null; // vremenno
+    public ExchangeRate update(ExchangeRate exchangeRate, BigDecimal rate) {
         String query = "UPDATE ExchangeRates SET Rate = ? WHERE ID = ?";
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query);

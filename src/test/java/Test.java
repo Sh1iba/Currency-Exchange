@@ -77,7 +77,7 @@ public class Test {
     private static void updateExchangeRate(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         ExchangeRate exchangeRate = null;
         ExchangeRateDao exchangeRateDao = new ExchangeRateDaoImpl();
-        exchangeRate = exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, rate);
+       // exchangeRate = exchangeRateDao.update(baseCurrencyCode, targetCurrencyCode, rate);
         System.out.println(exchangeRate);
     }
 
