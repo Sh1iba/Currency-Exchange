@@ -39,20 +39,14 @@ public class ExchangeRatesServlet extends BaseServlet {
             resp.setContentType("application/json");
             String baseCurrencyCode = req.getParameter("baseCurrencyCode");
             String targetCurrencyCode = req.getParameter("targetCurrencyCode");
-            validateForm(baseCurrencyCode, targetCurrencyCode);
-            Validation.codeValidation(baseCurrencyCode);
-            Validation.codeValidation(targetCurrencyCode);
-            BigDecimal rate;
-            try {
-                rate = new BigDecimal(req.getParameter("rate"));
-            } catch (NumberFormatException e) {
-                throw new IncorrectRequestException("Rate must be a valid number");
-            }
+            String strRate = req.getParameter("rate");
+            validateForm(baseCurrencyCode, targetCurrencyCode, strRate);
+            validateParameter(baseCurrencyCode, targetCurrencyCode, strRate);
+            BigDecimal rate = new BigDecimal(strRate);
 
             ExchangeRateDto exchangeRateDto = exchangeRateService.addExchangeRate(baseCurrencyCode, targetCurrencyCode, rate);
             resp.setStatus(HttpServletResponse.SC_CREATED);
             gson.toJson(exchangeRateDto, resp.getWriter());
-
         } catch (DatabaseException e) {
             writeErrorMessage(resp, e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (IncorrectRequestException e) {
@@ -64,9 +58,18 @@ public class ExchangeRatesServlet extends BaseServlet {
         }
     }
 
-    private void validateForm(String baseCurrencyCode, String targetCurrencyCode) throws IncorrectRequestException {
+    private void validateForm(String baseCurrencyCode,
+                              String targetCurrencyCode, String rate) throws IncorrectRequestException {
         Validation.formValidation(baseCurrencyCode, "baseCurrencyCode");
         Validation.formValidation(targetCurrencyCode, "targetCurrencyCode");
+        Validation.formValidation(rate, "rate");
+    }
+
+    private void validateParameter(String baseCurrencyCode,
+                                   String targetCurrencyCode, String rate) {
+        Validation.codeValidation(baseCurrencyCode);
+        Validation.codeValidation(targetCurrencyCode);
+        Validation.rateValidation(rate);
     }
 
 }

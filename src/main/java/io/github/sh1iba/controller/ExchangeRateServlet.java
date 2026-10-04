@@ -58,12 +58,9 @@ public class ExchangeRateServlet extends BaseServlet {
             Map<String, String> reqBody = parseFromForm(req);
             String strRate = reqBody.get("rate");
             Validation.formValidation(strRate, "rate");
-            BigDecimal rate;
-            try {
-                rate = new BigDecimal(strRate);
-            } catch (NumberFormatException e) {
-                throw new IncorrectRequestException("Rate must be a valid number");
-            }
+            Validation.rateValidation(strRate);
+            BigDecimal rate = new BigDecimal(strRate);
+
             ExchangeRateDto exchangeRateDto = exchangeRateService.updateExchangeRate(baseCode, targetCode, rate);
             resp.setStatus(HttpServletResponse.SC_OK);
             gson.toJson(exchangeRateDto, resp.getWriter());

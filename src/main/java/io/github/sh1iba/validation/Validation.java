@@ -2,6 +2,7 @@ package io.github.sh1iba.validation;
 
 import io.github.sh1iba.exception.IncorrectRequestException;
 
+import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 public class Validation {
@@ -32,6 +33,14 @@ public class Validation {
         if (code.length() != PAIR_CODES_LENGTH || !code.equals(code.toUpperCase()) || isNotLetter(code)) {
             throw new IncorrectRequestException("Invalid exchange rate format. Exchange rate must be exactly " +
                     PAIR_CODES_LENGTH + " uppercase letters. Example : 'USDRUB'");
+        }
+    }
+
+    public static void rateValidation(String strRate){
+        try {
+            BigDecimal rate = new BigDecimal(strRate);
+        } catch (NumberFormatException e) {
+            throw new IncorrectRequestException("Rate must be a valid number");
         }
     }
 
