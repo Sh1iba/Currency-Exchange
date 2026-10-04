@@ -17,6 +17,8 @@ import java.util.ResourceBundle;
 public abstract class BaseServlet extends HttpServlet {
     private static final String METHOD_PATCH = "PATCH";
     protected final Gson gson = new Gson();
+    protected static final String PAIR_CODE_MESSAGE = "The currency pair codes are missing from the address";
+    protected static final String CODE_MESSAGE = "The currency code is missing from the address";
 
     protected void writeErrorMessage(HttpServletResponse resp, String message, int statusCode) throws IOException {
         resp.setContentType("application/json");

@@ -5,7 +5,7 @@ import io.github.sh1iba.exception.DatabaseException;
 import io.github.sh1iba.exception.IncorrectRequestException;
 import io.github.sh1iba.exception.ObjectNotFoundException;
 import io.github.sh1iba.service.ExchangeRateService;
-import io.github.sh1iba.validation.ExchangeRateValidation;
+import io.github.sh1iba.validation.Validation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,15 +27,14 @@ public class ExchangeRateServlet extends BaseServlet {
         try {
             resp.setContentType("application/json");
             String path = req.getPathInfo();
-            ExchangeRateValidation.pathValidation(path);
+            Validation.pathValidation(path, PAIR_CODE_MESSAGE);
             String pairOfCodes = path.substring(1);
-            ExchangeRateValidation.pairOfCodesValidation(pairOfCodes, CURRENCY_PAIR_CODES_LENGTH);
+            Validation.pairOfCodesValidation(pairOfCodes);
             String baseCode = pairOfCodes.substring(0, CURRENCY_CODE_LENGTH);
             String targetCode = pairOfCodes.substring(CURRENCY_CODE_LENGTH, CURRENCY_PAIR_CODES_LENGTH);
             ExchangeRateDto exchangeRateDto = exchangeRateService.getExchangeRateByCodes(baseCode, targetCode);
             resp.setStatus(HttpServletResponse.SC_OK);
             gson.toJson(exchangeRateDto, resp.getWriter());
-
         } catch (DatabaseException e) {
             writeErrorMessage(resp, e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         } catch (IncorrectRequestException e) {
@@ -50,15 +49,15 @@ public class ExchangeRateServlet extends BaseServlet {
         try {
             resp.setContentType("application/json");
             String path = req.getPathInfo();
-            ExchangeRateValidation.pathValidation(path);
+            Validation.pathValidation(path, PAIR_CODE_MESSAGE);
             String pairOfCodes = path.substring(1);
-            ExchangeRateValidation.pairOfCodesValidation(pairOfCodes, CURRENCY_PAIR_CODES_LENGTH);
+            Validation.pairOfCodesValidation(pairOfCodes);
             String baseCode = pairOfCodes.substring(0, CURRENCY_CODE_LENGTH);
             String targetCode = pairOfCodes.substring(CURRENCY_CODE_LENGTH, CURRENCY_PAIR_CODES_LENGTH);
 
             Map<String, String> reqBody = parseFromForm(req);
-            ExchangeRateValidation.formValidation(reqBody, "rate");
             String strRate = reqBody.get("rate");
+            Validation.formValidation(strRate, "rate");
             BigDecimal rate;
             try {
                 rate = new BigDecimal(strRate);

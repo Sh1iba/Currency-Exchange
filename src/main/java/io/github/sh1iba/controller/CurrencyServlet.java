@@ -5,7 +5,7 @@ import io.github.sh1iba.exception.IncorrectRequestException;
 import io.github.sh1iba.exception.ObjectNotFoundException;
 import io.github.sh1iba.exception.DatabaseException;
 import io.github.sh1iba.service.CurrencyService;
-import io.github.sh1iba.validation.CurrencyValidation;
+import io.github.sh1iba.validation.Validation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,10 +23,9 @@ public class CurrencyServlet extends BaseServlet {
         try {
             resp.setContentType("application/json");
             String path = req.getPathInfo();
-            CurrencyValidation.pathValidation(path);
+            Validation.pathValidation(path, CODE_MESSAGE);
             String code = path.substring(1);
-
-            CurrencyValidation.codeValidation(code);
+            Validation.codeValidation(code);
             CurrencyDto currencyDto = currencyService.getCurrencyByCode(code);
             resp.setStatus(HttpServletResponse.SC_OK);
             gson.toJson(currencyDto, resp.getWriter());

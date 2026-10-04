@@ -6,8 +6,7 @@ import io.github.sh1iba.exception.IncorrectRequestException;
 import io.github.sh1iba.exception.ObjectExistsException;
 import io.github.sh1iba.exception.ObjectNotFoundException;
 import io.github.sh1iba.service.ExchangeRateService;
-import io.github.sh1iba.validation.CurrencyValidation;
-import io.github.sh1iba.validation.ExchangeRateValidation;
+import io.github.sh1iba.validation.Validation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,11 +37,11 @@ public class ExchangeRatesServlet extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             resp.setContentType("application/json");
-            validateForm(req);
             String baseCurrencyCode = req.getParameter("baseCurrencyCode");
             String targetCurrencyCode = req.getParameter("targetCurrencyCode");
-            ExchangeRateValidation.codeValidation(baseCurrencyCode);
-            ExchangeRateValidation.codeValidation(targetCurrencyCode);
+            validateForm(baseCurrencyCode, targetCurrencyCode);
+            Validation.codeValidation(baseCurrencyCode);
+            Validation.codeValidation(targetCurrencyCode);
             BigDecimal rate;
             try {
                 rate = new BigDecimal(req.getParameter("rate"));
@@ -65,10 +64,9 @@ public class ExchangeRatesServlet extends BaseServlet {
         }
     }
 
-    private void validateForm(HttpServletRequest req) throws IncorrectRequestException {
-        ExchangeRateValidation.formValidation(req, "baseCurrencyCode");
-        ExchangeRateValidation.formValidation(req, "targetCurrencyCode");
-        ExchangeRateValidation.formValidation(req, "rate");
+    private void validateForm(String baseCurrencyCode, String targetCurrencyCode) throws IncorrectRequestException {
+        Validation.formValidation(baseCurrencyCode, "baseCurrencyCode");
+        Validation.formValidation(targetCurrencyCode, "targetCurrencyCode");
     }
 
 }

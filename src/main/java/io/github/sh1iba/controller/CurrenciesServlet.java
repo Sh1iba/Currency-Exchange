@@ -5,7 +5,7 @@ import io.github.sh1iba.exception.ObjectExistsException;
 import io.github.sh1iba.exception.DatabaseException;
 import io.github.sh1iba.exception.IncorrectRequestException;
 import io.github.sh1iba.service.CurrencyService;
-import io.github.sh1iba.validation.CurrencyValidation;
+import io.github.sh1iba.validation.Validation;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,12 +49,16 @@ public class CurrenciesServlet extends BaseServlet {
     }
 
     private CurrencyDto getDataFromForm(HttpServletRequest req) throws IncorrectRequestException {
-        CurrencyValidation.formValidation(req,"name");
-        CurrencyValidation.formValidation(req,"code");
-        CurrencyValidation.formValidation(req,"sign");
-        String name = req.getParameter("name");
-        String code = req.getParameter("code");
-        String sign = req.getParameter("sign");
+        String keyName = "name";
+        String keyCode = "code";
+        String keySign = "sign";
+        String name = req.getParameter(keyName);
+        String code = req.getParameter(keyCode);
+        String sign = req.getParameter(keySign);
+        Validation.formValidation(name, keyName);
+        Validation.formValidation(code, keyCode);
+        Validation.formValidation(sign, keySign);
+        Validation.codeValidation(code);
         return new CurrencyDto(code, name, sign);
     }
 }
