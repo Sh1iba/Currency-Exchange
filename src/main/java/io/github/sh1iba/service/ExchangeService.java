@@ -10,6 +10,7 @@ import io.github.sh1iba.dto.mapper.ExchangeRateMapper;
 import io.github.sh1iba.model.ExchangeRate;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 public class ExchangeService {
@@ -21,7 +22,10 @@ public class ExchangeService {
         if (res.isPresent()) {
             return res.get();
         }
-
+        res = reverseExchange(baseCurrency, targetCurrency, amount);
+        if (res.isPresent()) {
+            return res.get();
+        }
         return null;
     }
 
@@ -32,13 +36,26 @@ public class ExchangeService {
         if (res.isPresent()) {
             exchangeRate = res.get();
             ExchangeRateDto exchangeRateDto = ExchangeRateMapper.INSTANCE.toDto(exchangeRate);
-            BigDecimal convertedAmount = amount.multiply(exchangeRateDto.getRate());
+            BigDecimal convertedAmount = amount.multiply(exchangeRateDto.getRate()).setScale(2, RoundingMode.HALF_UP);
             exchangeDto = new ExchangeDto(exchangeRateDto.getBaseCurrency(), exchangeRateDto.getTargetCurrency(),
                     exchangeRateDto.getRate(), amount, convertedAmount);
         }
         return Optional.ofNullable(exchangeDto);
     }
 
-
+    private Optional<ExchangeDto> reverseExchange(String baseCurrency, String targetCurrency, BigDecimal amount) {
+        ExchangeRate exchangeRate = null;
+        ExchangeDto exchangeDto = null;
+        Optional<ExchangeRate> res = exchangeRateDao.get(targetCurrency, baseCurrency);
+        if (res.isPresent()) {
+            exchangeRate = res.get();
+            ExchangeRateDto exchangeRateDto = ExchangeRateMapper.INSTANCE.toDto(exchangeRate);
+            BigDecimal convertedAmount = amount.divide(exchangeRateDto.getRate(), 2, RoundingMode.HALF_UP);
+            BigDecimal rate = new BigDecimal(1).divide(exchangeRateDto.getRate(), 6, RoundingMode.HALF_UP);
+            exchangeDto = new ExchangeDto(exchangeRateDto.getTargetCurrency(), exchangeRateDto.getBaseCurrency(),
+                    rate, amount, convertedAmount);
+        }
+        return Optional.ofNullable(exchangeDto);
+    }
 
 }
