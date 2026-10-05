@@ -7,6 +7,7 @@ import io.github.sh1iba.dao.ExchangeRateDaoImpl;
 import io.github.sh1iba.dto.ExchangeDto;
 import io.github.sh1iba.dto.ExchangeRateDto;
 import io.github.sh1iba.dto.mapper.ExchangeRateMapper;
+import io.github.sh1iba.exception.ObjectNotFoundException;
 import io.github.sh1iba.model.ExchangeRate;
 
 import java.math.BigDecimal;
@@ -26,7 +27,12 @@ public class ExchangeService {
         if (res.isPresent()) {
             return res.get();
         }
-        return null;
+        res = crossExchange(baseCurrency, targetCurrency, amount);
+        if (res.isPresent()){
+            return res.get();
+        }
+        throw new ObjectNotFoundException("The currency exchange was not completed. " +
+                "The exchange rate for the pair has not been found");
     }
 
     private Optional<ExchangeDto> directExchange(String baseCurrency, String targetCurrency, BigDecimal amount) {
@@ -53,6 +59,25 @@ public class ExchangeService {
             BigDecimal convertedAmount = amount.divide(exchangeRateDto.getRate(), 2, RoundingMode.HALF_UP);
             BigDecimal rate = new BigDecimal(1).divide(exchangeRateDto.getRate(), 6, RoundingMode.HALF_UP);
             exchangeDto = new ExchangeDto(exchangeRateDto.getTargetCurrency(), exchangeRateDto.getBaseCurrency(),
+                    rate, amount, convertedAmount);
+        }
+        return Optional.ofNullable(exchangeDto);
+    }
+
+    private Optional<ExchangeDto> crossExchange(String baseCurrency, String targetCurrency, BigDecimal amount) {
+        ExchangeRateDto baseExchangeRate = null;
+        ExchangeRateDto targetExchangeRate = null;
+        ExchangeDto exchangeDto = null;
+        String usdCode = "USD";
+        Optional<ExchangeRate> baseCurrencyUsdPair = exchangeRateDao.get(usdCode, baseCurrency);
+        Optional<ExchangeRate> targetCurrencyUsdPair = exchangeRateDao.get(usdCode, targetCurrency);
+        if (baseCurrencyUsdPair.isPresent() && targetCurrencyUsdPair.isPresent()) {
+            baseExchangeRate = ExchangeRateMapper.INSTANCE.toDto(baseCurrencyUsdPair.get());
+            targetExchangeRate = ExchangeRateMapper.INSTANCE.toDto(targetCurrencyUsdPair.get());
+            BigDecimal rate = targetExchangeRate.getRate()
+                    .divide(baseExchangeRate.getRate(), 6, RoundingMode.HALF_UP);
+            BigDecimal convertedAmount = amount.multiply(rate).setScale(2, RoundingMode.HALF_UP);
+            exchangeDto = new ExchangeDto(baseExchangeRate.getTargetCurrency(), targetExchangeRate.getTargetCurrency(),
                     rate, amount, convertedAmount);
         }
         return Optional.ofNullable(exchangeDto);
