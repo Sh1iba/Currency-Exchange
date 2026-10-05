@@ -1,28 +1,37 @@
 package io.github.sh1iba.controller;
 
+import io.github.sh1iba.dto.ExchangeDto;
 import io.github.sh1iba.exception.DatabaseException;
 import io.github.sh1iba.exception.IncorrectRequestException;
 import io.github.sh1iba.exception.ObjectExistsException;
 import io.github.sh1iba.exception.ObjectNotFoundException;
+import io.github.sh1iba.service.ExchangeService;
 import io.github.sh1iba.validation.Validation;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 
+@WebServlet("/exchange")
 public class ExchangeServlet extends BaseServlet {
+
+    private final ExchangeService exchangeService = new ExchangeService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            resp.setContentType("application/json");
             String baseCurrencyCode = req.getParameter("from");
             String targetCurrencyCode = req.getParameter("to");
             String strAmount = req.getParameter("amount");
             parameterValidation(baseCurrencyCode, targetCurrencyCode, strAmount);
             BigDecimal amount = new BigDecimal(strAmount);
-
+            ExchangeDto exchangeDto = exchangeService.exchange(baseCurrencyCode, targetCurrencyCode, amount);
+            resp.setStatus(HttpServletResponse.SC_OK);
+            gson.toJson(exchangeDto, resp.getWriter());
 
         } catch (DatabaseException e) {
             writeErrorMessage(resp, e.getMessage(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
